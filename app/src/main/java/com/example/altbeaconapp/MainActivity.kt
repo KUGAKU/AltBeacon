@@ -71,13 +71,25 @@ class MainActivity : AppCompatActivity(), BeaconConsumer {
         beaconManager?.addMonitorNotifier(monitorNotifier)
         //BeaconManagerクラスのレンジング設定
         beaconManager?.addRangeNotifier(rangeNotifier)
+        //領域監視の開始
         startMonitoringBeacons()
+        //距離測定の開始
+        startRangingBeaconsInRegion()
     }
 
     private fun startMonitoringBeacons(){
         Log.d("","startMonitoringBeacons")
         try {
             beaconManager?.startMonitoringBeaconsInRegion(region)
+        } catch (e: RemoteException) {
+            e.printStackTrace()
+        }
+    }
+
+    private fun startRangingBeaconsInRegion(){
+        Log.d("","startRangingBeaconsInRegion")
+        try {
+            beaconManager?.startRangingBeaconsInRegion(region)
         } catch (e: RemoteException) {
             e.printStackTrace()
         }
@@ -90,6 +102,7 @@ class MainActivity : AppCompatActivity(), BeaconConsumer {
         }
         override fun didExitRegion(p0: Region?) {
             Log.d("","didExitRegion")
+            Log.d("",p0.toString())
         }
         override fun didDetermineStateForRegion(p0: Int, p1: Region?) {
             Log.d("","didDetermineStateForRegion")
@@ -97,9 +110,9 @@ class MainActivity : AppCompatActivity(), BeaconConsumer {
     }
 
     private val rangeNotifier = RangeNotifier { beacons, region ->
-        Log.d("","rangeNotifier")
         for (beacon in beacons) {
-            Log.d("",beacon.toString())
+            Log.d("beacon",beacon.toString())
+            Log.d("region",region.toString())
         }
     }
 
