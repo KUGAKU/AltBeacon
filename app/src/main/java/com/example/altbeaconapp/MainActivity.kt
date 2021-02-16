@@ -1,17 +1,18 @@
 package com.example.altbeaconapp
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.RemoteException
 import android.util.Log
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import org.altbeacon.beacon.*
-import kotlin.math.log
+import org.altbeacon.beacon.service.BeaconService
 
 class MainActivity : AppCompatActivity(), BeaconConsumer {
 
@@ -42,6 +43,7 @@ class MainActivity : AppCompatActivity(), BeaconConsumer {
         beaconManager = BeaconManager.getInstanceForApplication(this)
         // BeaconParseを設定
         beaconManager!!.beaconParsers.add(BeaconParser().setBeaconLayout(IBEACON_FORMAT))
+        startService(Intent(this,BeaconService().javaClass))
     }
 
     override fun onResume() {
@@ -52,8 +54,8 @@ class MainActivity : AppCompatActivity(), BeaconConsumer {
 
     override fun onPause() {
         super.onPause()
-        beaconManager!!.unbind(this@MainActivity)
-        Log.d(" onPause","call  onPause")
+        //beaconManager!!.unbind(this@MainActivity)
+        //Log.d(" onPause","call  onPause")
     }
 
     /**************************************************
